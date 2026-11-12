@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0618" />
+  <title>Big G | Lives toda noite</title>
+  <meta name="description" content="Site do streamer Big G: status da live, agenda da semana, clipes e redes." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0618'/%3E%3Ccircle cx='16' cy='18' r='9' fill='%23ff2e9a'/%3E%3Cpath d='M5 20h22M5 24h22' stroke='%230b0618' stroke-width='2'/%3E%3C/svg%3E" />
+  <script type="module" crossorigin src="./assets/index-BhtAp0f6.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-6Q6iP5aI.css">
+</head>
+<body>
+  <a class="pular" href="#live">Pular para a live</a>
+
+  <!-- OSD de fita VHS: acompanha o scroll -->
+  <div class="osd" aria-hidden="true">
+    <span class="osd__play">PLAY ▶</span>
+    <span class="osd__tc" id="timecode">00:00:00</span>
+  </div>
+  <div class="scan" aria-hidden="true"></div>
+
+  <nav class="topo" aria-label="Seções">
+    <a class="topo__marca" href="#inicio">Big G</a>
+    <ul class="topo__links">
+      <li><a href="#live">Ao vivo</a></li>
+      <li><a href="#agenda">Agenda</a></li>
+      <li><a href="#clipes">Clipes</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#redes">Redes</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <!-- 1. HERO -->
+    <header class="hero" id="inicio">
+      <div class="hero__fundo" aria-hidden="true">
+        <div class="hero__sol"></div>
+        <div class="hero__chao"></div>
+        <svg class="hero__palmeiras" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+          <defs>
+            <path id="folha" d="M0 0C30-42 96-48 152 6 100-18 46-14 0 0Z" />
+            <g id="copa">
+              <use href="#folha" transform="rotate(-78)" />
+              <use href="#folha" transform="rotate(-46)" />
+              <use href="#folha" transform="rotate(-14)" />
+              <use href="#folha" transform="rotate(22) scale(.9)" />
+              <use href="#folha" transform="rotate(52) scale(.7)" />
+            </g>
+            <g id="palmeira">
+              <path d="M-9 0C-5-120 10-222 27-300l11 2C22-215 11-120 10 0Z" />
+              <g transform="translate(33 -300)">
+                <use href="#copa" />
+                <use href="#copa" transform="scale(-1 1)" />
+              </g>
+            </g>
+          </defs>
+          <g fill="#0b0618" class="so-largo">
+            <use href="#palmeira" transform="translate(300 600) scale(.95)" />
+            <use href="#palmeira" transform="translate(1150 600) scale(-.85 .85)" />
+            <use href="#palmeira" transform="translate(110 600) scale(1.7)" />
+            <use href="#palmeira" transform="translate(1330 600) scale(-1.85 1.85)" />
+          </g>
+          <g fill="#0b0618" class="so-estreito">
+            <use href="#palmeira" transform="translate(652 600) scale(.5)" />
+            <use href="#palmeira" transform="translate(584 600) scale(1.05)" />
+            <use href="#palmeira" transform="translate(858 600) scale(-.95 .95)" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="hero__barra hero__barra--cima" aria-hidden="true"></div>
+      <div class="hero__barra hero__barra--baixo" aria-hidden="true"></div>
+
+      <div class="hero__texto">
+        <h1 class="neon neon--magenta hero__nome" data-texto="Big G">Big G</h1>
+        <p class="hero__slogan" id="slogan"></p>
+        <div class="hero__acoes">
+          <a class="botao" href="#live">Assistir ao vivo</a>
+          <button class="botao botao--ciano" id="tocar-trilha" type="button" hidden>Tocar a trilha</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. LIVE -->
+    <section class="bloco" id="live" aria-labelledby="t-live">
+      <h2 class="neon neon--ciano titulo" id="t-live" data-texto="Ao vivo">Ao vivo</h2>
+      <div class="live">
+        <div class="live__tela" id="player">
+          <button class="live__ligar" id="ligar" type="button">
+            <span class="live__tri" aria-hidden="true"></span>
+            <span id="ligar-texto">Abrir o player</span>
+          </button>
+        </div>
+        <aside class="live__painel">
+          <p class="placa" id="placa" data-estado="offline">
+            <span class="placa__luz" aria-hidden="true"></span>
+            <span id="placa-texto">Offline</span>
+          </p>
+          <p class="live__proxima" id="proxima"></p>
+          <a class="link" id="link-canal" href="#" target="_blank" rel="noopener">Abrir o canal no YouTube</a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 3. AGENDA -->
+    <section class="bloco" id="agenda" aria-labelledby="t-agenda">
+      <h2 class="neon neon--magenta titulo" id="t-agenda" data-texto="Agenda">Agenda</h2>
+      <p class="sub">A semana de lives. Horários no seu fuso.</p>
+      <ol class="agenda" id="lista-agenda"></ol>
+    </section>
+
+    <!-- 4. CLIPES -->
+    <section class="bloco" id="clipes" aria-labelledby="t-clipes">
+      <h2 class="neon neon--ciano titulo" id="t-clipes" data-texto="Clipes">Clipes</h2>
+      <p class="sub">Os melhores momentos, sem enrolação.</p>
+      <ul class="clipes" id="grade-clipes"></ul>
+    </section>
+
+    <!-- 5. SOBRE + SETUP -->
+    <section class="bloco" id="sobre" aria-labelledby="t-sobre">
+      <h2 class="neon neon--magenta titulo" id="t-sobre" data-texto="Quem é o Big G">Quem é o Big G</h2>
+      <div class="sobre">
+        <div class="sobre__texto" id="sobre-texto"></div>
+        <div class="setup">
+          <h3 class="setup__titulo">O setup</h3>
+          <dl class="setup__lista" id="setup-lista"></dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. REDES -->
+    <section class="bloco" id="redes" aria-labelledby="t-redes">
+      <h2 class="neon neon--ciano titulo" id="t-redes" data-texto="Cola com a gente">Cola com a gente</h2>
+      <ul class="redes" id="lista-redes"></ul>
+      <div class="apoio">
+        <p>A live é de graça. Se quiser ajudar a manter o motor ligado:</p>
+        <a class="botao botao--ciano" id="botao-apoio" href="#" target="_blank" rel="noopener">Apoiar o canal</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- 7. RODAPÉ -->
+  <footer class="rodape">
+    <p class="rodape__marca">Big G</p>
+    <p>Site de fã para fã, feito com shaders e café. Não é afiliado a nenhum estúdio de jogos.</p>
+    <p><a class="link" href="#inicio">Voltar ao início</a></p>
+  </footer>
+
+  <!-- Mini player da trilha: aparece só enquanto toca -->
+  <aside class="trilha" id="trilha" aria-label="Trilha sonora" hidden>
+    <div class="trilha__tela" id="trilha-tela"></div>
+    <div class="trilha__barra">
+      <p class="trilha__credito" id="trilha-credito"></p>
+      <button class="trilha__fechar" id="trilha-fechar" type="button">Parar</button>
+    </div>
+  </aside>
+
+</body>
+</html>
