@@ -1,0 +1,23 @@
+# Confere a cada 5 minutos se o canal está ao vivo e atualiza live.json.
+name: Status da live
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: status-da-live
+jobs:
+  checar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - run: node robo/checar-live.mjs live.json
+      - name: Publicar se mudou
+        run: |
+          git diff --quiet live.json && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -qm "Atualiza status da live" live.json
+          git push
