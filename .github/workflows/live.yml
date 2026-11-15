@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: node robo/checar-live.mjs live.json
+        env:
+          YT_API_KEY: ${{ secrets.YT_API_KEY }} # sem o segredo, o robô lê a página pública
       - name: Publicar se mudou
         run: |
           git diff --quiet live.json && exit 0
