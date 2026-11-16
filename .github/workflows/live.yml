@@ -1,25 +1,46 @@
-# Confere a cada 5 minutos se o canal está ao vivo e atualiza live.json.
+# Vigia a live do canal: confere a cada 2 minutos e atualiza live.json quando muda.
+#
+# O agendamento do GitHub (cron) atrasa horas neste repositório, então a vigia roda
+# em laço por ~5h30 e, ao terminar, dispara a próxima rodada dela mesma.
+# O cron fica só como rede de segurança, para religar a corrente se ela cair.
 name: Status da live
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '17,47 * * * *'
   workflow_dispatch:
 permissions:
   contents: write
-concurrency: status-da-live
+  actions: write
 jobs:
-  checar:
+  vigiar:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 350
+    env:
+      GH_TOKEN: ${{ github.token }}
+      YT_API_KEY: ${{ secrets.YT_API_KEY }} # sem o segredo, o robô lê a página pública
     steps:
-      - uses: actions/checkout@v4
-      - run: node robo/checar-live.mjs live.json
-        env:
-          YT_API_KEY: ${{ secrets.YT_API_KEY }} # sem o segredo, o robô lê a página pública
-      - name: Publicar se mudou
+      - name: Sair se já existe uma vigia rodando
+        id: unica
         run: |
-          git diff --quiet live.json && exit 0
+          sleep 40 # dá tempo de a rodada anterior terminar depois de disparar esta
+          outras=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow live.yml --status in_progress --json databaseId -q "[.[] | select(.databaseId != $GITHUB_RUN_ID)] | length")
+          echo "outras=$outras" >> "$GITHUB_OUTPUT"
+          echo "Outras vigias rodando: $outras"
+      - uses: actions/checkout@v4
+        if: steps.unica.outputs.outras == '0'
+      - name: Vigiar
+        if: steps.unica.outputs.outras == '0'
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -qm "Atualiza status da live" live.json
-          git push
+          fim=$(( $(date +%s) + 19800 )) # 5h30
+          while [ "$(date +%s)" -lt "$fim" ]; do
+            git pull -q --rebase || true # pega atualizações do site feitas no meio da vigia
+            node robo/checar-live.mjs live.json
+            if ! git diff --quiet live.json; then
+              git commit -qm "Atualiza status da live" live.json
+              git push -q || { git pull -q --rebase && git push -q; }
+            fi
+            sleep 120
+          done
+          gh workflow run live.yml --repo "$GITHUB_REPOSITORY" --ref main
